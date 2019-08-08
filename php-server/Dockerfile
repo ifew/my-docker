@@ -27,9 +27,7 @@ RUN apt-get upgrade && apt-get update && ACCEPT_EULA=Y && apt-get install -y \
         libtidy-dev \
         libssl-dev \
         zlib1g-dev \
-        libpng-dev \
         libjpeg-dev \
-        libfreetype6-dev \
         libaio1 \
         apt-file \
         wget \
@@ -56,14 +54,15 @@ RUN pecl install redis \
     && pecl install grpc \
     && pecl install protobuf
 
-RUN apt-get install -y php-calendar php-iconv php-bcmath php-xml php-gd php-mbstring php-pdo php-tidy php-gettext php-intl php-mysql php-mysqli php-simplexml php-tokenizer php-xml php-xsl php-xmlwriter php-zip php-opcache php-exif
+RUN apt-get install -y php-calendar php-iconv php-bcmath php-xml php-gd php-mbstring php-pdo php-tidy php-gettext php-intl php-mysql php-mysqli php-simplexml php-tokenizer php-xsl php-xmlwriter php-zip php-opcache php-exif
     #&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-gd --with-jpeg-dir=/usr/include/ \
     #&& docker-php-ext-configure zip --with-libzip \
     #&& docker-php-ext-enable redis geoip apcu memcached timezonedb grpc
 
-# Ensure that PHP FPM is run as root.
-#RUN sed -i "s/user = www-data/user = root/" /etc/php/7.2/fpm/pool.d/www.conf
-#RUN sed -i "s/group = www-data/group = root/" /etc/php/7.2/fpm/pool.d/www.conf
+RUN sed -i "s/user = root/user = www-data/" /etc/php/7.2/fpm/pool.d/www.conf
+RUN sed -i "s/group = root/group = www-data/" /etc/php/7.2/fpm/pool.d/www.conf
+RUN sed -i "s/listen.owner = root/listen.owner = www-data/" /etc/php/7.2/fpm/pool.d/www.conf
+RUN sed -i "s/listen.group = root/listen.group = root/" /etc/php/7.2/fpm/pool.d/www.conf
 
 # Pass all docker environment
 RUN sed -i '/^;clear_env = no/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
@@ -84,6 +83,7 @@ RUN sed -i '/^;pm\.status_path/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
 COPY nginx/nginx.conf /etc/nginx/
 COPY nginx/fastcgi_params /etc/nginx/
 COPY nginx/default.conf /etc/nginx/conf.d/
+COPY nginx/default /etc/nginx/sites-enabled/
 COPY php/php.ini /etc/php/7.2/fpm/conf.d/40-custom.ini
 
 # install GIT
@@ -114,6 +114,7 @@ COPY php/php.ini /etc/php/7.2/fpm/conf.d/40-custom.ini
 # Ports
 ################################################################################
 
-EXPOSE 80 443 9000
+RUN service php7.2-fpm start
+RUN service nginx start
 
-ENV export GOOGLE_APPLICATION_CREDENTIALS=/var/www/test-google-speech-c0b1e7744540.json
+EXPOSE 80 443 9000
