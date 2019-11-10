@@ -3,7 +3,7 @@
 ## Build Image
 
 ```bash
-build -t php-server .
+docker build -t php-server .
 ```
 
 ## Build Container
