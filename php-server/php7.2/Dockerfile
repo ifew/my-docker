@@ -80,6 +80,7 @@ RUN sed -i '/^;pm\.status_path/s/^;//' /etc/php/7.2/fpm/pool.d/www.conf
 #RUN php7.2enmod mcrypt memcached redis grpc
 
 # Add configuration files
+COPY ./supervisord.conf /etc/supervisor/conf.d/
 COPY nginx/nginx.conf /etc/nginx/
 COPY nginx/fastcgi_params /etc/nginx/
 COPY nginx/default.conf /etc/nginx/conf.d/
