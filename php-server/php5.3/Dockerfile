@@ -19,7 +19,7 @@ RUN	\
 	&& echo "deb http://nginx.org/packages/ubuntu/ precise nginx" | tee -a /etc/apt/sources.list \
 	&& echo "deb-src http://nginx.org/packages/ubuntu/ precise nginx" | tee -a /etc/apt/sources.list \
 	&& apt-get update \
-	&& apt-get install -y nginx \
+	&& apt-get install -y vim wget nginx \
 	&& rm -rf  ${NGINX_CONF_DIR}/sites-enabled/* ${NGINX_CONF_DIR}/sites-available/* \
 	# Install supervisor
 	&& apt-get install -y supervisor && mkdir -p /var/log/supervisor \
