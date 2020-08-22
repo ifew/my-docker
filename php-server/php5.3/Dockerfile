@@ -2,6 +2,7 @@ FROM romeoz/docker-phpfpm:5.3
 MAINTAINER romeOz <serggalka@gmail.com>
 
 ENV OS_LOCALE="en_US.UTF-8"
+RUN ln -sf /usr/share/zoneinfo/Asia/Bangkok /etc/localtime
 RUN locale-gen ${OS_LOCALE}
 ENV LANG=${OS_LOCALE} \
     LANGUAGE=${OS_LOCALE} \
