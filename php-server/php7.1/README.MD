@@ -10,5 +10,5 @@ docker build -t nginx_php:7.1 .
 ## Build Container
 
 ```bash
-docker run -d -i -p 80:80 -v ${PWD}:/var/www/app/ --net db_network --name http_php73 nginx_php:7.1
+docker run -d -i -p 80:80 -v ${PWD}:/var/www/app/ --net db_network --name http_php71 nginx_php:7.1
 ```
