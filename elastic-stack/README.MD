@@ -21,3 +21,6 @@ When you’re done experimenting, you can tear down the containers and volumes b
 ```
 docker-compose down -v
 ```
+
+## Test
+Test with sample data by import ```ElasticsearchLog.postman_collection.json``` to Postman
