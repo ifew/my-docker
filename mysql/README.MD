@@ -15,3 +15,9 @@ docker run --name db_mysql -v /Users/ifew/Database/db_mysql:/var/lib/mysql -e MY
 ```
 docker run --name db_mysql5 -v /Users/ifew/Database/db_mysql:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=1234 -d -p 3306:3306 --net db_network mysql:5.7
 ```
+
+## MySQL 5, For Apple M1
+Must added this argument
+```
+docker run --platform linux/x86_64 ...
+```
