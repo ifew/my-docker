@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  influxdb:
+    image: influxdb:1.8.6
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    volumes:
+      - './influxdb_data:/var/lib/influxdb'
+      - './config/influxdb.conf:/etc/influxdb/influxdb.conf'
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=${DOCKER_INFLUXDB_INIT_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET}
+  grafana:
+    image: grafana/grafana
+    user: $GRAFANA_USER_ID_PERMISSION
+    container_name: grafana
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
+    env_file: 
+      - .env
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=${GF_AUTH_ANONYMOUS_ORG_ROLE}
+      - GF_AUTH_ANONYMOUS_ENABLED=${GF_AUTH_ANONYMOUS_ENABLED}
+      - GF_AUTH_BASIC_ENABLED=${GF_AUTH_BASIC_ENABLED}
+      - GF_PATHS_DATA=${GF_PATHS_DATA}
+    ports:
+      - "3000:3000"
+    volumes:
+      - './grafanadb_data:/var/lib/grafana'
