@@ -4,7 +4,7 @@ Based from [romeoz/docker-phpfpm:5.3](https://github.com/romeOz/docker-nginx-php
 ## Build Image
 
 ```bash
-docker build -t nginx_php:5.3 .
+docker build --platform=linux/i386 -t nginx_php:5.3 .
 ```
 
 ## Build Container
