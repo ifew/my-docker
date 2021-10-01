@@ -1,0 +1,185 @@
+{
+	"info": {
+		"_postman_id": "3fa93b37-079d-492a-ac5d-27a1c2a7d943",
+		"name": "Elasticsearch Log",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Check Endpoint",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL_ENDPOINT}}",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Index log import products",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/log-import-products",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"log-import-products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Index log import products",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"mappings\": {\n    \"properties\": {\n        \"data_value\": {\n            \"type\": \"text\"\n        },\n        \"date_import\": {\n            \"type\": \"date\",\n            \"format\": \"yyyy-MM-dd'T'HH:mm:ss\"\n        }\n    }\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/log-import-products",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"log-import-products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Mapping Index log import products",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/log-import-products/_mapping",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"log-import-products",
+						"_mapping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Document log import products",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"data_value\":\"test\",\"date_import\": \"2021-05-15T19:05:00\"}"
+				},
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/log-import-products/_doc/",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"log-import-products",
+						"_doc",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search match_all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"query\": {\n     \"match_all\": {}\n   }\n}"
+				},
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/log-import-products/_search",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"log-import-products",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search fulltext match",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"query\": {\n     \"match\": {\n      \"data_value\": \"test\"\n     }\n   }\n}"
+				},
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/log-import-products/_search",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"log-import-products",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
