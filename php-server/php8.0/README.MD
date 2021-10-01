@@ -12,5 +12,5 @@ docker build -t nginx_php:8.0 .
 Run this command in your web folder
 
 ```bash
-docker run -d -i -p 80:80 -v ${PWD}:/var/www/html/ --net db_network --name http_php80 nginx_php:8.0
+docker run -d -i -p 80:80 -v ${PWD}:/var/www/html/public/ --net db_network --name http_php80 nginx_php:8.0
 ```
