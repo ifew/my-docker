@@ -6,14 +6,14 @@
 
 ### Create Network
 ```
- docker network create kong-net
+docker network create kong-net
 ```
 
 ### Create Database
 ```
 docker run -d --name kong-database \
   --network=kong-net \
-  -p 5432:5432 \
+  -p 54321:5432 \
   -e "POSTGRES_USER=kong" \
   -e "POSTGRES_DB=kong" \
   -e "POSTGRES_PASSWORD=kongpass" \
@@ -25,6 +25,7 @@ docker run -d --name kong-database \
 docker run --rm --network=kong-net \
   -e "KONG_DATABASE=postgres" \
   -e "KONG_PG_HOST=kong-database" \
+  -e "KONG_PG_DATABASE=kong" \
   -e "KONG_PG_PASSWORD=kongpass" \
  kong:2.8.1-alpine kong migrations bootstrap
 ```
@@ -35,25 +36,24 @@ docker run -d --name kong-gateway \
   --network=kong-net \
   -e "KONG_DATABASE=postgres" \
   -e "KONG_PG_HOST=kong-database" \
-  -e "KONG_PG_USER=kong" \
   -e "KONG_PG_PASSWORD=kongpass" \
   -e "KONG_PROXY_ACCESS_LOG=/dev/stdout" \
   -e "KONG_ADMIN_ACCESS_LOG=/dev/stdout" \
   -e "KONG_PROXY_ERROR_LOG=/dev/stderr" \
   -e "KONG_ADMIN_ERROR_LOG=/dev/stderr" \
-  -e "KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl" \
-  -e "KONG_PROXY_LISTEN=0.0.0.0:8000, 0.0.0.0:8443 ssl" \
+  -e "KONG_ADMIN_LISTEN=0.0.0.0:8101, 0.0.0.0:8144 ssl" \
+  -e "KONG_PROXY_LISTEN=0.0.0.0:8100, 0.0.0.0:8143 ssl" \
   -e "KONG_PLUGINS=bundled, basic-auth, key-auth, oauth2, hmac-auth, jwt, cors, session, rate-limiting, prometheus, proxy-cache,bot-detection, ip-restriction, acl, request-size-limiting, response-ratelimiting, response-transformer, request-transformer, file-log, http-log, tcp-log, udp-log, syslog" \
-  -p 8000:8000 \
-  -p 8443:8443 \
-  -p 8001:8001 \
-  -p 8444:8444 \
+  -p 8100:8100 \
+  -p 8143:8143 \
+  -p 8101:8101 \
+  -p 8144:8144 \
   kong:2.8.1-alpine
   ```
 
   ### Verify Kong is Work!
   ```
-curl -i -X GET --url http://localhost:8001/services
+curl -i -X GET --url http://localhost:8101/services
  ```
 
  ### Clean up Kong Docker
@@ -69,12 +69,12 @@ docker network rm kong-net
 
 ### Preparing database
 ```
-docker run --rm --network=kong-net pantsel/konga -c prepare -a postgres -u postgresql://kong:kongpass@kong-database:5432/konga_db
+docker run --rm --network=kong-net pantsel/konga -c prepare -a postgres -u postgresql://kong:kongpass@kong-database/konga_db
 ```
 
 ### Create Konga Container
 ```
-docker run -d -p 1337:1337 \
+docker run -d -p 1338:1337 \
      --network=kong-net \
      -e "DB_ADAPTER=postgres" \
      -e "DB_HOST=kong-database" \
@@ -89,27 +89,27 @@ docker run -d -p 1337:1337 \
 
 ### Access to Admin UI
 ```
-http://konga.localhost:1337/
+http://localhost:1338/
 ```
 
 ### Config
-1. Use default connection (Name: Kong, URL: http://localhost:8001/ )
+1. Use default connection (Name: Kong, URL: http://localhost:8101/ )
 
 ```
 curl -i -X POST \
-  --url http://localhost:8001/apis/ \
+  --url http://localhost:8101/apis/ \
   --data 'name=myifew' \
   --data 'hosts=api.localhost' \
   --data 'upstream_url=https://myifew.com'
 ````
 
 ### Install Plugin
-  curl -X POST http://localhost:8001/plugins \
+  curl -X POST http://localhost:8101/plugins \
     --data "name=file-log"  \
     --data "config.path=/tmp/file.log" \
     --data "config.reopen=false"
 
-  curl -X POST http://localhost:8001/plugins/ \
+  curl -X POST http://localhost:8101/plugins/ \
       --data "name=proxy-cache"  \
       --data "config.response_code=200" \
       --data "config.request_method=GET" \
