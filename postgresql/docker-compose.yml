@@ -1,0 +1,29 @@
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:18.1
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: few
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: default_database
+    networks:
+      - db_network
+    volumes:
+      - postgres_data:/var/lib/postgresql
+ 
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - db_network
+
+volumes:
+  postgres_data:
+networks:
+  db_network:
